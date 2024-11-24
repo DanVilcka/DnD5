@@ -7,20 +7,19 @@ def create_character():
     name = input("Введите имя персонажа: ")
     race = input("Выберите расу (Человек, Эльф, Гном): ")
     char_class = input("Выберите класс (Воин, Маг, Лучник): ")
-    return Character(name, race, char_class)
+    character = Character(name, race, char_class)
+    character.inventory = Inventory()
+    character.equipment = Equipment()
+    # Добавляем стандартные предметы в инвентарь
+    character.inventory.add_item(Item("Деревянный меч", "оружие", 1, 0))
+    character.inventory.add_item(Item("Кожаный доспех", "броня", 0, 1))
+    return character
 
 def create_enemy():
     name = input("Введите имя противника: ")
     race = input("Выберите расу противника (Гоблин, Орк, Тролль): ")
     char_class = input("Выберите класс противника (Воин, Маг, Лучник): ")
     return Enemy(name, race, char_class)
-
-def create_item():
-    name = input("Введите название предмета: ")
-    slot = input("Введите слот для экипировки (оружие, броня, аксессуар): ")
-    attack = int(input("Введите дополнительный урон: "))
-    defense = int(input("Введите дополнительную защиту: "))
-    return Item(name, slot, attack, defense)
 
 def main():
     characters = []
@@ -31,17 +30,13 @@ def main():
         print("2. Выбрать персонажа")
         print("3. Создать противника")
         print("4. Выбрать противника")
-        print("5. Создать предмет")
-        print("6. Добавить предмет в инвентарь")
-        print("7. Экипировать предмет")
-        print("8. Начать бой")
-        print("9. Выход")
+        print("5. Экипировать предмет")
+        print("6. Начать бой")
+        print("7. Выход")
         choice = input("Выберите действие: ")
 
         if choice == '1':
             character = create_character()
-            character.inventory = Inventory()
-            character.equipment = Equipment()
             characters.append(character)
             print(f"Персонаж {character.name} создан.")
 
@@ -73,18 +68,6 @@ def main():
             print(f"Выбран противник {enemy.name}.")
 
         elif choice == '5':
-            item = create_item()
-            print(f"Предмет {item.name} создан.")
-
-        elif choice == '6':
-            if 'character' not in locals():
-                print("Сначала выберите персонажа.")
-                continue
-            item = create_item()
-            character.inventory.add_item(item)
-            print(f"Предмет {item.name} добавлен в инвентарь {character.name}.")
-
-        elif choice == '7':
             if 'character' not in locals():
                 print("Сначала выберите персонажа.")
                 continue
@@ -98,7 +81,7 @@ def main():
             character.defense += item.defense
             print(f"Предмет {item.name} экипирован.")
 
-        elif choice == '8':
+        elif choice == '6':
             if 'character' not in locals():
                 print("Сначала выберите персонажа.")
                 continue
@@ -108,7 +91,7 @@ def main():
             combat_system = CombatSystem(character, enemy)
             combat_system.start_combat()
 
-        elif choice == '9':
+        elif choice == '7':
             break
 
 if __name__ == "__main__":
